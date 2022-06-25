@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Button, TouchableOpacity } from 'react-native'
 import { Input, Icon, Text } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const navigation = useNavigation();
 
     const handleLogin = ({ email, senha }) => {
         console.log(`Email: ${email} - Senha: ${senha}`);
+        navigation.navigate('Home')
     }
 
     return (
@@ -26,13 +29,12 @@ const Login = () => {
                 value={senha}
                 leftIcon={<Icon name='key' color='#000' type='font-awesome' size={24} />}
             />
-            <TouchableHighlight style={styles.button}>
-                <Button
-                    title='Entrar'
-                    onPress={() => handleLogin({ email, senha })}
-                    color= '#4a09bb'
-                />
-            </TouchableHighlight>
+            <Button
+                title='Entrar'
+                onPress={() => handleLogin({ email, senha })}
+                color='#4a09bb'
+            />
+
         </View>
     );
 }
