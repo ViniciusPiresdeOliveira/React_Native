@@ -1,22 +1,46 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Button, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Button, Alert } from 'react-native'
 import { Input, Icon, Text } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { LoginService } from '../../services/LoginService';
 
-const Login = () => {
+const Login = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const navigation = useNavigation();
+    //const navigation = useNavigation();
 
-    const handleLogin = ({ email, senha }) => {
+    const handleLogin = async (email:string, senha:string) => {
         console.log(`Email: ${email} - Senha: ${senha}`);
-        navigation.navigate('Home')
+
+        const respostaLogin = await LoginService(email, senha);
+        if (!respostaLogin) {
+            Alert.alert(
+                "Erro",
+                "",
+                [
+                    { text: "OK"},
+                    { text: "Não foi possível realizar o login."},
+                ]
+            );
+        } else {
+            navigation.navigate('HomeScreen', {
+                screen: 'TabNavigationScreen',
+                params: {
+                    screen: 'HomeTabScreen',
+                    params: {
+                        token: respostaLogin.token,
+                    }
+                }
+            })
+        }
+        //navigation.navigate('Home')
+
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.texto_entrada}>{'Bem-vindo'}</Text>
+            <Text style={styles.texto_entrada}>{'Bem-vindo a GameIsLife'}</Text>
             <Input
                 placeholder='E-mail'
                 onChangeText={setEmail}
@@ -31,7 +55,7 @@ const Login = () => {
             />
             <Button
                 title='Entrar'
-                onPress={() => handleLogin({ email, senha })}
+                onPress={() => handleLogin(email, senha)}
                 color='#4a09bb'
             />
 

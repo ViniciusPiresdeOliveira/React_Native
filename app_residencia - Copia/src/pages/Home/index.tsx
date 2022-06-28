@@ -1,80 +1,85 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View, TouchableOpacity } from 'react-native'
 import { Text, Card } from 'react-native-elements';
+import AxiosInstance from '../../api/AxiosInstance';
 
-const Home = () => {
+type CategoriaType = {
+    idCategoria: number;
+      nomeCategoria: string;
+      nomeImagem: string;
+}
+
+const Home = ({ route, navigation }) => {
+    const { token } = route.params;
+    const [categoria, setCategoria] = useState<CategoriaType[]>([]);
+    console.log('Token' + token);
+
+    useEffect(() => {
+        getDadosCategoria();
+    }, []);
+
+    const getDadosCategoria = async () => {
+        AxiosInstance.get(
+            `/categoria`,
+            { headers: { "Authorization": `Bearer ${token}` } }
+        ).then(result => {
+            console.log('Dados das categorias ' + JSON.stringify(result.data))
+            setCategoria(result.data);
+        }).catch((error) => {
+            console.log("Erro ao carregar a lista de categorias - " + JSON.stringify(error));
+
+        });
+    }
+
     return (
         <ScrollView style={styles.container}>
             <ScrollView style={styles.scroll_categorias} horizontal={true}>
-                <TouchableOpacity
-                    onPress={() => console.log('Categoria 1 foi clicada')}
-                    style={styles.botao_categoria}
-                >
-                    <View style={styles.view_itens_categoria}>
-                        <Text style={styles.texto_nome_categoria} >{'Categorias 1'}</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => console.log('Categoria 2 foi clicada')}
-                    style={styles.botao_categoria}
-
-                >
-                    <View style={styles.view_itens_categoria}>
-                        <Text style={styles.texto_nome_categoria} >{'Categorias 2'}</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => console.log('Categoria 3 foi clicada')}
-                    style={styles.botao_categoria}
-
-                >
-                    <View style={styles.view_itens_categoria}>
-                        <Text style={styles.texto_nome_categoria} >{'Categorias 3'}</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => console.log('Categoria 4 foi clicada')}
-                    style={styles.botao_categoria}
-
-                >
-                    <View style={styles.view_itens_categoria}>
-                        <Text style={styles.texto_nome_categoria} >{'Categorias 4'}</Text>
-                    </View>
-                </TouchableOpacity>
+                {
+                    categoria.map((key, index) => (
+                        <TouchableOpacity key={index}
+                            onPress={() => console.log('Categoria ${key.nomeCategoria} foi clicada')}
+                            style={styles.botao_categoria}
+                        >
+                            <View style={styles.view_itens_categoria}>
+                                <Text style={styles.texto_nome_categoria} >{key.nomeCategoria}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))
+                }
             </ScrollView>
-            <Text>{'Recentes'}</Text>
+            <Text>{'Jogos mais populares:'}</Text>
             <ScrollView horizontal={true}>
-                <Card>
-                    <Card.Image source={require('../../assets/macarrao.jpg')} />
+                <Card containerStyle={styles.card_pai}>
+                    <Card.Image style={styles.imagem} source={require('../../assets/fh5.jpg')} />
                     <Card.Divider />
-                    <Card.Title>
-                        Macarrão
+                    <Card.Title style={styles.descricao}>
+                        Forza Horizon 5
                     </Card.Title>
-                    <Text>Macarrão com molho de tomate</Text>
+                    <Text style={styles.descricao}>Jogo de Corrida</Text>
                 </Card>
-                <Card>
-                    <Card.Image source={require('../../assets/macarrao.jpg')} />
+                <Card containerStyle={styles.card_pai}>
+                    <Card.Image style={styles.imagem} source={require('../../assets/fifa22.png')} />
                     <Card.Divider />
-                    <Card.Title>
-                        Macarrão
+                    <Card.Title style={styles.descricao}>
+                        Fifa 22
                     </Card.Title>
-                    <Text>Macarrão com molho de tomate</Text>
+                    <Text style={styles.descricao}>Jogo de Futebol</Text>
                 </Card>
-                <Card>
-                    <Card.Image source={require('../../assets/macarrao.jpg')} />
+                <Card containerStyle={styles.card_pai}>
+                    <Card.Image style={styles.imagem} source={require('../../assets/nfs.png')} />
                     <Card.Divider />
-                    <Card.Title>
-                        Macarrão
+                    <Card.Title style={styles.titulo}>
+                        Need for Speed Heat
                     </Card.Title>
-                    <Text>Macarrão com molho de tomate</Text>
+                    <Text style={styles.descricao}>Jogo de Corrida</Text>
                 </Card>
-                <Card>
-                    <Card.Image source={require('../../assets/macarrao.jpg')} />
+                <Card containerStyle={styles.card_pai}>
+                    <Card.Image style={styles.imagem} source={require('../../assets/cod.png')} />
                     <Card.Divider />
-                    <Card.Title>
-                        Macarrão
+                    <Card.Title style={styles.descricao}>
+                        Call of Duty WW2
                     </Card.Title>
-                    <Text>Macarrão com molho de tomate</Text>
+                    <Text style={styles.descricao}>Jogo de Tiro</Text>
                 </Card>
             </ScrollView>
         </ScrollView>
@@ -84,7 +89,22 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#b4fb00',
-        padding: 30,
+        padding: 25,
+    },
+    card_pai: {
+        padding: 15,
+        backgroundColor: '#b4fb00',
+        borderColor: 'black',
+        borderWidth: 1.5,
+        maxHeight: 290,
+        maxWidth: 220
+    },
+    titulo: {
+        maxWidth: 130
+    },
+    imagem: {
+        width: 130,
+        height: 180
     },
     scroll_categorias: {
         //backgroundColor: '#333',
@@ -105,6 +125,10 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontWeight: 'bold',
+    },
+    descricao: {
+        textAlign: 'center',
+        marginBottom: 30
     }
 });
 
