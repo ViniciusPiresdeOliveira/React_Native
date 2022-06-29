@@ -43,10 +43,12 @@ const Routes = () => {
                 <StackNavigation.Screen
                     name='LoginScreen'
                     component={Login}
+                    options={{headerShown: false}}
                 />
                 <StackNavigation.Screen
                     name='HomeScreen'
                     component={NavigationDrawer}
+                    options={{headerShown: false}}
                 />
             </StackNavigation.Navigator>
         </NavigationContainer>

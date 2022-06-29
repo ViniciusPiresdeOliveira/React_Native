@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, ScrollView, FlatList, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Text, Card } from 'react-native-elements';
 import AxiosInstance from '../../api/AxiosInstance';
 import { AutenticacaoContext } from '../../context/AutenticacaoContext';
+import Loading from '../../components/Loading';
 
 type CategoriaType = {
     idCategoria: number;
@@ -10,34 +11,72 @@ type CategoriaType = {
     nomeImagem: string;
 }
 
+type ProdutoType = {
+    idProduto: number;
+    sku: string;
+    nomeProduto: string;
+    imagemProduto: string;
+    precoProduto: number;
+    descricaoProduto: string;
+}
+
 const Home = ({ navigation }) => {
     const { usuario } = useContext(AutenticacaoContext);
     const [categoria, setCategoria] = useState<CategoriaType[]>([]);
+    const [produto, setProduto] = useState<ProdutoType[]>([]);
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         getDadosCategoria();
+        getDadosProdutos();
     }, []);
-
+  
+    const [loading, setLoading] = useState(false);
     const getDadosCategoria = async () => {
+        setLoading(true)
         AxiosInstance.get(
             `/categoria`,
             { headers: { "Authorization": `Bearer ${usuario.token}` } }
         ).then(result => {
             console.log('Dados das categorias ' + JSON.stringify(result.data))
             setCategoria(result.data);
+            setLoading(false)
         }).catch((error) => {
             console.log("Erro ao carregar a lista de categorias - " + JSON.stringify(error));
 
         });
     }
+    const getDadosProdutos = async () => {
+        setLoading(true)
+        AxiosInstance.get(
+            `/produto`,
+            { headers: { "Authorization": `Bearer ${usuario.token}` } }
+        ).then(result => {
+            console.log('Dados das produtos ' + JSON.stringify(result.data))
+            setProduto(result.data);
+           setLoading(false)
+        }).catch((error) => {
+            console.log("Erro ao carregar a lista de produtos - " + JSON.stringify(error));
+
+        });
+    }
 
     return (
-        <ScrollView style={styles.container}>
-            <ScrollView style={styles.scroll_categorias} horizontal={true}>
+        <ScrollView style={styles.container} >
+            <FlatList
+                data={categoria}
+                keyExtractor={item => String(item.idCategoria)}
+                renderItem={({ item }) => <ListCategoria categoria={item} />}
+                horizontal={true}
+                onEndReached={getDadosCategoria}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={<FooterList load={loading} />}
+            />
+            {/* <ScrollView style={styles.scroll_categorias} horizontal={true}>
                 {
                     categoria.map((key, index) => (
                         <TouchableOpacity key={index}
-                            onPress={() => console.log('Categoria ${key.nomeCategoria} foi clicada')}
+                            onPress={() => console.log(`Categoria ${key.nomeCategoria} foi clicada`)}
                             style={styles.botao_categoria}
                         >
                             <View style={styles.view_itens_categoria}>
@@ -46,9 +85,18 @@ const Home = ({ navigation }) => {
                         </TouchableOpacity>
                     ))
                 }
-            </ScrollView>
-            <Text>{'Jogos mais populares:'}</Text>
-            <ScrollView horizontal={true}>
+            </ScrollView> */}
+            <Text>{'Recentes:'}</Text>
+            <FlatList
+                data={produto}
+                keyExtractor={item => String(item.idProduto)}
+                renderItem={({ item }) => <ListProduto produto={item} />}
+                horizontal={true}
+                onEndReached={getDadosCategoria}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={<FooterList load={loading} />}
+            />
+            {/* <ScrollView horizontal={true}>
                 <Card containerStyle={styles.card_pai}>
                     <Card.Image style={styles.imagem} source={require('../../assets/fh5.jpg')} />
                     <Card.Divider />
@@ -68,7 +116,7 @@ const Home = ({ navigation }) => {
                 <Card containerStyle={styles.card_pai}>
                     <Card.Image style={styles.imagem} source={require('../../assets/nfs.png')} />
                     <Card.Divider />
-                    <Card.Title style={styles.titulo}>
+                    <Card.Title style={styles.limite}>
                         Need for Speed Heat
                     </Card.Title>
                     <Text style={styles.descricao}>Jogo de Corrida</Text>
@@ -81,34 +129,54 @@ const Home = ({ navigation }) => {
                     </Card.Title>
                     <Text style={styles.descricao}>Jogo de Tiro</Text>
                 </Card>
-            </ScrollView>
+            </ScrollView> */}
         </ScrollView>
     );
 };
+function ListCategoria({ categoria }) {
+    return (
+        <View style={styles.listCategoria}>
+            <Text style={styles.listTextCategoria}>{categoria.nomeCategoria}</Text>
+        </View>
+    )
+}
+function ListProduto({ produto }) {
+    return (
+        <View style={styles.listProduto}>
+            <Text style={styles.listTextProduto}>{produto.nomeProduto}</Text>
+        </View>
+    )
+}
+function FooterList({ load }) {
+    if (!load) return null;
+    return (
+        <View style={styles.loading}>
+            <ActivityIndicator size={25} color='#4a09bb'/>
+        </View>
+    );
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#b4fb00',
         padding: 25,
     },
-    card_pai: {
+    listProduto: {
         padding: 15,
         backgroundColor: '#b4fb00',
         borderColor: 'black',
         borderWidth: 1.5,
-        maxHeight: 290,
-        maxWidth: 220
+        height: 290,
+        width: 220,
+        margin: 20
     },
-    titulo: {
-        maxWidth: 130
-    },
+    // limite: {
+    //     maxWidth: 130,
+    //     fontWeight: 'bold',
+    // },
     imagem: {
         width: 130,
         height: 180
-    },
-    scroll_categorias: {
-        //backgroundColor: '#333',
-        flexGrow: 0,
     },
     view_itens_categoria: {
         width: 100,
@@ -126,9 +194,31 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
     },
-    descricao: {
+    listTextProduto: {
+       textAlign: 'center',
+       marginTop: 100,
+       fontSize: 25
+    },
+    listCategoria: {
+        backgroundColor: '#4a09bb',
+        margin: 10,
+        marginBottom: 20,
+        width: 100,
+        height: 100,
+        justifyContent: 'center',
+    },
+    listTextCategoria: {
+        padding: 10,
         textAlign: 'center',
-        marginBottom: 30
+        color: 'white',
+        justifyContent: 'center',
+        fontWeight: 'bold'
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10
     }
 });
 

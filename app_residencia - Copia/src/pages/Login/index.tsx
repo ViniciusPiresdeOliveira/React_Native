@@ -3,8 +3,7 @@ import { View, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native
 import { Input, Icon, Text } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { AutenticacaoContext } from '../../context/AutenticacaoContext';
-import Carregamento from '../../components/Carregamento';
-import Loading from '../../components/Carregamento';
+import Loading from '../../components/Loading';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -15,9 +14,9 @@ const Login = ({ navigation }) => {
 
     const handleLogin = async (email: string, senha: string) => {
         setVisible(true);
-        setTimeout(() =>{
+        setTimeout(() => {
             setVisible(false);
-        }, 5000);
+        }, 7000);
         console.log(`Email: ${email} - Senha: ${senha}`);
 
         const respostaLogin = await login(email, senha);
@@ -38,31 +37,34 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.texto_entrada}>{'Bem-vindo a GameIsLife'}</Text>
-            <Input
-                placeholder='E-mail'
-                onChangeText={setEmail}
-                value={email}
-                leftIcon={<Icon name='user' color='#000' type='font-awesome' size={24} />}
-            />
-            <Input
-                placeholder='Senha'
-                onChangeText={setSenha}
-                value={senha}
-                leftIcon={<Icon name='key' color='#000' type='font-awesome' size={24} />}
-                secureTextEntry
-            />
-            <Button
-                title='Entrar'
-                onPress={() => handleLogin(email, senha)}
-                color='#4a09bb'
-            />
-           <Carregamento
-           visible={visible}
-           />
+        <>
+            <View style={styles.container}>
+                <Text style={styles.texto_entrada}>{'Bem-vindo a GameIsLife'}</Text>
+                <Input
+                    placeholder='E-mail'
+                    onChangeText={setEmail}
+                    value={email}
+                    leftIcon={<Icon name='user' color='#000' type='font-awesome' size={24} />}
+                />
+                <Input
+                    placeholder='Senha'
+                    onChangeText={setSenha}
+                    value={senha}
+                    leftIcon={<Icon name='key' color='#000' type='font-awesome' size={24} />}
+                    secureTextEntry
+                />
+                <Button
+                    title='Entrar'
+                    onPress={() => handleLogin(email, senha)}
+                    color='#4a09bb'
+                />
 
-        </View>
+
+            </View>
+            <Loading
+                visible={visible}
+            />
+        </>
     );
 }
 const styles = StyleSheet.create({
