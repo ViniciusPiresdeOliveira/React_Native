@@ -1,38 +1,37 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Button, Alert } from 'react-native'
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native'
 import { Input, Icon, Text } from 'react-native-elements';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { LoginService } from '../../services/LoginService';
+import { AutenticacaoContext } from '../../context/AutenticacaoContext';
+import Carregamento from '../../components/Carregamento';
+import Loading from '../../components/Carregamento';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const { login } = useContext(AutenticacaoContext);
+    const [visible, setVisible] = useState(false);
     //const navigation = useNavigation();
 
-    const handleLogin = async (email:string, senha:string) => {
+    const handleLogin = async (email: string, senha: string) => {
+        setVisible(true);
+        setTimeout(() =>{
+            setVisible(false);
+        }, 5000);
         console.log(`Email: ${email} - Senha: ${senha}`);
 
-        const respostaLogin = await LoginService(email, senha);
+        const respostaLogin = await login(email, senha);
         if (!respostaLogin) {
             Alert.alert(
                 "Erro",
                 "",
                 [
-                    { text: "OK"},
-                    { text: "Não foi possível realizar o login."},
+                    { text: "OK" },
+                    { text: "Não foi possível realizar o login." },
                 ]
             );
         } else {
-            navigation.navigate('HomeScreen', {
-                screen: 'TabNavigationScreen',
-                params: {
-                    screen: 'HomeTabScreen',
-                    params: {
-                        token: respostaLogin.token,
-                    }
-                }
-            })
+            navigation.navigate('HomeScreen');
         }
         //navigation.navigate('Home')
 
@@ -52,12 +51,16 @@ const Login = ({navigation}) => {
                 onChangeText={setSenha}
                 value={senha}
                 leftIcon={<Icon name='key' color='#000' type='font-awesome' size={24} />}
+                secureTextEntry
             />
             <Button
                 title='Entrar'
                 onPress={() => handleLogin(email, senha)}
                 color='#4a09bb'
             />
+           <Carregamento
+           visible={visible}
+           />
 
         </View>
     );

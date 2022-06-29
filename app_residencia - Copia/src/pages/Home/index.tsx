@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, ScrollView, View, TouchableOpacity } from 'react-native'
 import { Text, Card } from 'react-native-elements';
 import AxiosInstance from '../../api/AxiosInstance';
+import { AutenticacaoContext } from '../../context/AutenticacaoContext';
 
 type CategoriaType = {
     idCategoria: number;
-      nomeCategoria: string;
-      nomeImagem: string;
+    nomeCategoria: string;
+    nomeImagem: string;
 }
 
-const Home = ({ route, navigation }) => {
-    const { token } = route.params;
+const Home = ({ navigation }) => {
+    const { usuario } = useContext(AutenticacaoContext);
     const [categoria, setCategoria] = useState<CategoriaType[]>([]);
-    console.log('Token' + token);
 
     useEffect(() => {
         getDadosCategoria();
@@ -21,7 +21,7 @@ const Home = ({ route, navigation }) => {
     const getDadosCategoria = async () => {
         AxiosInstance.get(
             `/categoria`,
-            { headers: { "Authorization": `Bearer ${token}` } }
+            { headers: { "Authorization": `Bearer ${usuario.token}` } }
         ).then(result => {
             console.log('Dados das categorias ' + JSON.stringify(result.data))
             setCategoria(result.data);
