@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
 import Categorias from '../pages/Categoria';
+import ProdutoCategoria from "../pages/ProdutoCategoria";
 
 const TabNavigation = createBottomTabNavigator();
 const BottomTabNavigator = () => {
@@ -49,6 +50,11 @@ const Routes = () => {
                     name='HomeScreen'
                     component={NavigationDrawer}
                     options={{headerShown: false}}
+                />
+                <StackNavigation.Screen
+                    name='ProdutoCategoria'
+                    component={ProdutoCategoria}
+                    options={{headerShown: true, title:'Produto Categoria'}}
                 />
             </StackNavigation.Navigator>
         </NavigationContainer>

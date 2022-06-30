@@ -4,21 +4,9 @@ import { Text, Card } from 'react-native-elements';
 import AxiosInstance from '../../api/AxiosInstance';
 import { AutenticacaoContext } from '../../context/AutenticacaoContext';
 import Loading from '../../components/Loading';
-
-type CategoriaType = {
-    idCategoria: number;
-    nomeCategoria: string;
-    nomeImagem: string;
-}
-
-type ProdutoType = {
-    idProduto: number;
-    sku: string;
-    nomeProduto: string;
-    imagemProduto: string;
-    precoProduto: number;
-    descricaoProduto: string;
-}
+import { CategoriaType } from '../../models/CategoriaType';
+import { ProdutoType } from '../../models/ProdutoType';
+import BarraPesquisa from '../../components/BarraPesquisa';
 
 const Home = ({ navigation }) => {
     const { usuario } = useContext(AutenticacaoContext);
@@ -30,7 +18,7 @@ const Home = ({ navigation }) => {
         getDadosCategoria();
         getDadosProdutos();
     }, []);
-  
+
     const [loading, setLoading] = useState(false);
     const getDadosCategoria = async () => {
         setLoading(true)
@@ -54,7 +42,7 @@ const Home = ({ navigation }) => {
         ).then(result => {
             console.log('Dados das produtos ' + JSON.stringify(result.data))
             setProduto(result.data);
-           setLoading(false)
+            setLoading(false)
         }).catch((error) => {
             console.log("Erro ao carregar a lista de produtos - " + JSON.stringify(error));
 
@@ -63,6 +51,7 @@ const Home = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container} >
+            <BarraPesquisa navigation={navigation}/>
             <FlatList
                 data={categoria}
                 keyExtractor={item => String(item.idCategoria)}
@@ -92,7 +81,7 @@ const Home = ({ navigation }) => {
                 keyExtractor={item => String(item.idProduto)}
                 renderItem={({ item }) => <ListProduto produto={item} />}
                 horizontal={true}
-                onEndReached={getDadosCategoria}
+                onEndReached={getDadosProdutos}
                 onEndReachedThreshold={0.1}
                 ListFooterComponent={<FooterList load={loading} />}
             />
@@ -151,7 +140,7 @@ function FooterList({ load }) {
     if (!load) return null;
     return (
         <View style={styles.loading}>
-            <ActivityIndicator size={25} color='#4a09bb'/>
+            <ActivityIndicator size={25} color='#4a09bb' />
         </View>
     );
 }
@@ -195,9 +184,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     listTextProduto: {
-       textAlign: 'center',
-       marginTop: 100,
-       fontSize: 25
+        textAlign: 'center',
+        marginTop: 100,
+        fontSize: 25
     },
     listCategoria: {
         backgroundColor: '#4a09bb',
