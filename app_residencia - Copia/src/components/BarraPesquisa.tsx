@@ -35,7 +35,8 @@ export default function BarraPesquisa(props) {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
+        <View style={{ flex: 1, alignItems: 'center', marginTop: 10, marginBottom: 30,  borderWidth: 1.5, borderColor: 'black', marginLeft: 60, marginRight: 60,
+    borderRadius: 14}}>
             <StatusBar barStyle="light-content" />
             <TextInput placeholder="Pesquisar..."
                 onChangeText={setPesquisa}

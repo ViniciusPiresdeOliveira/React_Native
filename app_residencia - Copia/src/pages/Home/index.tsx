@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#b4fb00',
         borderColor: 'black',
         borderWidth: 1.5,
-        height: 290,
-        width: 220,
+        height: 200,
+        width: 170,
         margin: 20
     },
     // limite: {
@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
     },
     listTextProduto: {
         textAlign: 'center',
-        marginTop: 100,
-        fontSize: 25
+        fontSize: 25,
+        marginTop: 50
     },
     listCategoria: {
         backgroundColor: '#4a09bb',

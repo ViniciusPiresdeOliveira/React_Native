@@ -39,7 +39,7 @@ const Login = ({ navigation }) => {
     return (
         <>
             <View style={styles.container}>
-                <Text style={styles.texto_entrada}>{'Bem-vindo a GameIsLife'}</Text>
+                <Text style={styles.texto_entrada}>{'Bem-vindo'}</Text>
                 <Input
                     placeholder='E-mail'
                     onChangeText={setEmail}

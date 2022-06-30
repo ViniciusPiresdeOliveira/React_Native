@@ -76,18 +76,21 @@ const ProdutoCategoria = () => {
         // </View>
         <View style={styles.container}>
             {!vazio && (
-                <FlatList
-                    data={produto}
-                    keyExtractor={(item, index) => String(item.idProduto)}
-                    renderItem={({ item }) => <ListProduto produto={item} />}
+                <View>
+                    <Text style={styles.titulo_secao}>{'PRODUTO X CATEGORIA'}</Text>
+                    <FlatList
+                        data={produto}
+                        keyExtractor={(item, index) => String(item.idProduto)}
+                        renderItem={({ item }) => <ListProduto produto={item} />}
                     // onEndReached={getDadosProdutos}
                     // onEndReachedThreshold={0.1}
                     // ListFooterComponent={<FooterList load={loading} />}
-                />
+                    />
+                </View>
             )}
             {vazio && (
                 <View>
-                    <Text>
+                    <Text style={styles.listaVazia}>
                         {'Nenhum Produto encotrado'}
                     </Text>
                 </View>
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#b4fb00',
         padding: 16,
-        alignItems: 'stretch',
+        alignItems: 'center',
         justifyContent: 'center',
     },
     listProduto: {
@@ -125,6 +128,11 @@ const styles = StyleSheet.create({
         color: '#4a09bb',
         fontWeight: 'bold',
         textAlign: 'center'
+    },
+    listaVazia: {
+        fontSize: 30,
+        textAlign: 'center',
+        marginTop: -30
     }
 })
 
