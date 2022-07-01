@@ -7,7 +7,7 @@ import Login from '../pages/Login';
 import Home from '../pages/Home';
 import Categorias from '../pages/Categoria';
 import ProdutoCategoria from "../pages/ProdutoCategoria";
-
+import Produto from '../pages/Produto'
 const TabNavigation = createBottomTabNavigator();
 const BottomTabNavigator = () => {
     return(
@@ -55,6 +55,11 @@ const Routes = () => {
                     name='ProdutoCategoria'
                     component={ProdutoCategoria}
                     options={{headerShown: true, title:'Produto Categoria'}}
+                />
+                <StackNavigation.Screen
+                    name='ProdutoScreen'
+                    component={Produto}
+                    options={{headerShown: true}}
                 />
             </StackNavigation.Navigator>
         </NavigationContainer>

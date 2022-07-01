@@ -85,14 +85,20 @@ const Home = ({ navigation }) => {
                 onEndReachedThreshold={0.1}
                 ListFooterComponent={<FooterList load={loading} />}
             />
-            {/* <ScrollView horizontal={true}>
+            <ScrollView horizontal={true}>
+            <TouchableOpacity
+            onPress={() => {
+                navigation.navigate({name: 'ProdutoScreen', params: {dadosDoProduto: dadosDoProduto},})
+            }}
+            />
+        
                 <Card containerStyle={styles.card_pai}>
                     <Card.Image style={styles.imagem} source={require('../../assets/fh5.jpg')} />
                     <Card.Divider />
                     <Card.Title style={styles.descricao}>
-                        Forza Horizon 5
+                        Produto 1
                     </Card.Title>
-                    <Text style={styles.descricao}>Jogo de Corrida</Text>
+                    <Text style={styles.descricao}>Descricao Produto 1</Text>
                 </Card>
                 <Card containerStyle={styles.card_pai}>
                     <Card.Image style={styles.imagem} source={require('../../assets/fifa22.png')} />
@@ -118,7 +124,7 @@ const Home = ({ navigation }) => {
                     </Card.Title>
                     <Text style={styles.descricao}>Jogo de Tiro</Text>
                 </Card>
-            </ScrollView> */}
+            </ScrollView>
         </ScrollView>
     );
 };

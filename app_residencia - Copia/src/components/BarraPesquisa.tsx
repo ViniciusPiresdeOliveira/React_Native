@@ -35,23 +35,27 @@ export default function BarraPesquisa(props) {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', marginTop: 10, marginBottom: 30,  borderWidth: 1.5, borderColor: 'black', marginLeft: 60, marginRight: 60,
-    borderRadius: 14}}>
-            <StatusBar barStyle="light-content" />
-            <TextInput placeholder="Pesquisar..."
-                onChangeText={setPesquisa}
-            />
-
+        <View>
+            <View style={{
+                flex: 1, alignItems: 'center', marginTop: 10, marginBottom: 30, borderWidth: 1.5, borderColor: 'black', marginLeft: 60, marginRight: 60,
+                borderRadius: 14
+            }}>
+                <StatusBar barStyle="light-content" />
+                <TextInput placeholder="Pesquisar..."
+                    onChangeText={setPesquisa} />
+            </View>
             <ScrollView>
-                {categoria.filter((val) => {
-                    if (pesquisa.length <= 1) {
-                        return;
-                    } else if (val.nomeCategoria.toLowerCase().includes(pesquisa.toLowerCase())) {
-                        return val
-                    }
-                }).map((categoria, indice) => (
-                    <Text onPress={(e) => selecionaPesquisa(categoria)} key={indice}>{categoria.nomeCategoria}</Text>
-                ))}
+                <View style={{ alignItems: 'center', marginBottom: 20, marginTop: -5}}>
+                    {categoria.filter((val) => {
+                        if (pesquisa.length <= 1) {
+                            return;
+                        } else if (val.nomeCategoria.toLowerCase().includes(pesquisa.toLowerCase())) {
+                            return val
+                        }
+                    }).map((categoria, indice) => (
+                        <Text onPress={(e) => selecionaPesquisa(categoria)} key={indice}>{categoria.nomeCategoria}</Text>
+                    ))}
+                </View>
             </ScrollView>
         </View>
     );
