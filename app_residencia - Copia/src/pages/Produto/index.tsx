@@ -19,13 +19,16 @@ const Produto = ({ route, navigation }) => {
                 <Text>Imagem</Text>
             </View>
             <View style={styles.containerProduto}>
-                <Text>{}</Text>
-                <Text>{}</Text>
-                <TouchableOpacity onPress={() => handleAddProduto()}>
-                    <Text>Comprar</Text>
+                <Text style={styles.nome_produto}>{nome_produto}</Text>
+                <Text style={styles.preco_produto}>{nome_produto}</Text>
+                <TouchableOpacity 
+                style={styles.btt_comprar}
+                onPress={() => handleAddProduto()}>
+                    <Text style={styles.txt_btt_comprar}>Comprar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text>Favoritar</Text>
+                <TouchableOpacity
+                style={styles.btt_favoritar}>
+                    <Text style={styles.txt_btt_comprar}>Favoritar</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -39,13 +42,46 @@ const styles = StyleSheet.create({
         padding: 16,
         alignItems: 'stretch',
         justifyContent: 'space-between',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop: 20
     },
     containerImagem: {
         width: '50%'
     },
     containerProduto: {
         width: '50%'
+    },
+    nome_produto: {
+        fontSize: 24,
+        color: 'black',
+        marginBottom: 20,
+        fontWeight: 'bold'
+    },
+    preco_produto: {
+        fontSize: 20,
+        color: 'black',
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    btt_comprar: {
+        backgroundColor: '#000',
+        padding: 10,
+        marginBottom: 20,
+        width: '70%'
+    },
+    btt_favoritar: {
+       padding:10,
+       borderBottomWidth: 2,
+       borderColor: '#000',
+       width: '70%'
+    },
+    txt_btt_comprar: {
+        color: '#fff',
+        textAlign: 'center'
+    },
+    txt_btt_favoritar: {
+        color: '#000',
+        textAlign: 'center'
     }
 });
 

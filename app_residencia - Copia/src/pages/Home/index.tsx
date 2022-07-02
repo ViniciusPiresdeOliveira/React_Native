@@ -7,6 +7,7 @@ import Loading from '../../components/Loading';
 import { CategoriaType } from '../../models/CategoriaType';
 import { ProdutoType } from '../../models/ProdutoType';
 import BarraPesquisa from '../../components/BarraPesquisa';
+import CardProduto from '../../components/CardProduto';
 
 const Home = ({ navigation }) => {
     const { usuario } = useContext(AutenticacaoContext);
@@ -48,7 +49,18 @@ const Home = ({ navigation }) => {
 
         });
     }
-
+    function ListCategoria({ categoria }) {
+        return (
+            <View style={styles.listCategoria}>
+                <Text style={styles.listTextCategoria}>{categoria.nomeCategoria}</Text>
+            </View>
+        )
+    }
+    function ListProduto({produto}) {
+        return (
+        <CardProduto  navigation={navigation} dados={produto}/>
+        );
+      }
     return (
         <ScrollView style={styles.container} >
             <BarraPesquisa navigation={navigation}/>
@@ -88,60 +100,14 @@ const Home = ({ navigation }) => {
             <ScrollView horizontal={true}>
             <TouchableOpacity
             onPress={() => {
-                navigation.navigate({name: 'ProdutoScreen', params: {dadosDoProduto: dadosDoProduto},})
+                navigation.navigate({name: 'ProdutoScreen', params: {dadosDoProduto: produto},})
             }}
-            />
-        
-                <Card containerStyle={styles.card_pai}>
-                    <Card.Image style={styles.imagem} source={require('../../assets/fh5.jpg')} />
-                    <Card.Divider />
-                    <Card.Title style={styles.descricao}>
-                        Produto 1
-                    </Card.Title>
-                    <Text style={styles.descricao}>Descricao Produto 1</Text>
-                </Card>
-                <Card containerStyle={styles.card_pai}>
-                    <Card.Image style={styles.imagem} source={require('../../assets/fifa22.png')} />
-                    <Card.Divider />
-                    <Card.Title style={styles.descricao}>
-                        Fifa 22
-                    </Card.Title>
-                    <Text style={styles.descricao}>Jogo de Futebol</Text>
-                </Card>
-                <Card containerStyle={styles.card_pai}>
-                    <Card.Image style={styles.imagem} source={require('../../assets/nfs.png')} />
-                    <Card.Divider />
-                    <Card.Title style={styles.limite}>
-                        Need for Speed Heat
-                    </Card.Title>
-                    <Text style={styles.descricao}>Jogo de Corrida</Text>
-                </Card>
-                <Card containerStyle={styles.card_pai}>
-                    <Card.Image style={styles.imagem} source={require('../../assets/cod.png')} />
-                    <Card.Divider />
-                    <Card.Title style={styles.descricao}>
-                        Call of Duty WW2
-                    </Card.Title>
-                    <Text style={styles.descricao}>Jogo de Tiro</Text>
-                </Card>
+            />  
             </ScrollView>
         </ScrollView>
     );
 };
-function ListCategoria({ categoria }) {
-    return (
-        <View style={styles.listCategoria}>
-            <Text style={styles.listTextCategoria}>{categoria.nomeCategoria}</Text>
-        </View>
-    )
-}
-function ListProduto({ produto }) {
-    return (
-        <View style={styles.listProduto}>
-            <Text style={styles.listTextProduto}>{produto.nomeProduto}</Text>
-        </View>
-    )
-}
+
 function FooterList({ load }) {
     if (!load) return null;
     return (

@@ -47,11 +47,20 @@ export function CarrinhoProvider({ children }) {
         
     }
 
+    const removerItemCarrinho = (_id) => {
+        realm_carrinho.write(() =>
+            realm_carrinho.delete(
+                realm_carrinho.objects('Produto').filter(produto => produto.id_produto == id),
+            ),
+        );
+    }
+
     return (
         <CarrinhoContext.Provider value={{
             listarProdutos,
             contarQuantidadeProdutos,
-            adicionarProduto
+            adicionarProduto,
+            removerItemCarrinho
         }}>
             {children}
         </CarrinhoContext.Provider>
